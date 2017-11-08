@@ -1,0 +1,72 @@
+Construire l'iso
+
+Assurez-vous que le package archiso est installé sur votre système.
+
+Vous devez construire à partir d'un système Arch, x86_64.
+
+Clonez le repo archlabs-iso sur votre système.
+git clone https://github.com/archlabs/archlabs-iso
+
+Créez un répertoire pour construire l'iso. Il peut être dans votre répertoire personnel,
+c'est juste un endroit pour travailler.
+En général, je crée simplement un répertoire appelé archlabs-iso dans mon dossier personnel.
+
+
+Vous devez déplacer tout le dossier "archiso" dans le nouveau répertoire que vous avez créé,
+mais il est très important que vous le fassiez en tant que root. Chaque fichier doit appartenir à "root".
+Vous pouvez le faire en ouvrant un gestionnaire de fichiers en tant que root. Ou à partir de la ligne de commande.
+
+Si vous avez cloné le repo dans votre dossier Téléchargements, puis créé un répertoire de travail appelé
+archlabs-iso, la commande ressemblerait à ceci
+sudo cp -r ~ / Téléchargements / archlabs-iso / archiso ~ / archlabs-iso /
+
+Dans le dossier archiso, il y a un fichier appelé packages.both.
+Ce fichier est une liste de paquets qui seront inclus dans l'iso.
+Vous pouvez ajouter ou supprimer des éléments de cette liste pour qu'ils soient inclus ou supprimés.
+
+Les packages.i686 et packages.x86_64 ne sont pas pertinents sauf si vous souhaitez intégrer plusieurs
+architectures.
+
+Les dossiers efiboot isolinux et syslinux contiennent les fichiers de configuration du démarrage
+de l'iso. Si vous voulez changer l'arrière-plan de l'écran de démarrage de l'iso ou l'un des
+entrées vous pouvez le faire en apportant les modifications aux fichiers dans le dossier syslinux. Je partirais
+le dossier efiboot seul, ainsi que le dossier isolinux.
+
+
+Le fichier pacman.conf qui se trouve dans le répertoire archiso est le pacman.conf utilisé uniquement lorsque
+construire l'iso. Si vous ouvrez le fichier, en bas se trouve l'entrée du repo Archlabs.
+
+Vous devrez cloner le repo Archlabs sur votre système local.
+git clone https://github.com/archlabs/archlabs-repo
+
+Ensuite, vous devez modifier la ligne dans le fichier pacman.conf pour qu'elle corresponde à l'emplacement du repo sur votre système. Par exemple, si vous avez cloné le repo à la racine de votre répertoire personnel, le
+L'entrée devrait ressembler à ceci:
+
+[archlabs-repo]
+SigLevel = Facultatif TrustAll
+Serveur = fichier: /// home / <nom d'utilisateur> / archlabs-repo / $ arch
+
+La seule ligne que vous devriez changer est le "Server = file.///home/<username>/archlabs-repo/$arch"
+De toute évidence, <nom d'utilisateur> serait votre nom d'utilisateur.
+
+Dans le dossier airootfs est le système de fichiers.
+
+C'est là que vous pouvez ajouter tout ce que vous voulez à l'iso. Rappelez-vous, tout doit être
+fait en tant que root, donc si vous ajoutez quelque chose, faites-le en tant que root ou en utilisant sudo.
+
+Quand tout est ajouté, retournez dans le répertoire archiso. Vous verrez un script appelé
+build.sh c'est le script de construction.
+
+Avant de construire, vous devrez nettoyer le cache pacman. Je sais, personne n'aime faire ça,
+mais cela évite les problèmes.
+sudo pacman -Scc
+
+Maintenant, lancez simplement sudo ./build.sh -v
+le -v est verbeux, donc il vous montrera plus de sortie.
+
+Quand il est finis, il y aura un répertoire appelé, et l'iso
+être là.
+
+Je sais qu'il me manque des choses, alors n'hésitez pas à poser des questions.
+
+J'espère que cela vous aideras.
